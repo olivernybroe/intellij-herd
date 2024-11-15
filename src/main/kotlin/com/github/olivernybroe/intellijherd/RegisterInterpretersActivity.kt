@@ -1,6 +1,7 @@
 package com.github.olivernybroe.intellijherd
 
 import com.github.olivernybroe.intellijherd.services.RegisterInterpreters
+import com.github.olivernybroe.intellijherd.services.SetProjectInterpreter
 import com.intellij.ide.AppLifecycleListener
 import com.intellij.ide.plugins.DynamicPluginListener
 import com.intellij.ide.plugins.IdeaPluginDescriptor
@@ -14,6 +15,10 @@ class RegisterInterpretersActivity: ProjectActivity, AppLifecycleListener, Dynam
     override suspend fun execute(project: Project) {
         ApplicationManager.getApplication().service<RegisterInterpreters>()
             .registerInterpreters()
+
+        // After interpreters has been registered we set the project interpreter
+        project.service<SetProjectInterpreter>()
+            .setInterpreter()
     }
 
     override fun welcomeScreenDisplayed() {
